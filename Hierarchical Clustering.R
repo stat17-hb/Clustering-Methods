@@ -40,8 +40,8 @@ if (pos %% ncol(temp)!=0){
 r
 c
 
-
 temp[r,c]
+min(temp)
 
 group <- c(2,2,3,4,6)
 
@@ -49,25 +49,28 @@ plot(df, pch=19, xlim=c(0,6), ylim=c(0,6), col=group)
 text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=group)
 
 
+### [step 2]
+
 # adjusted distance matrix by single linkage method
 temp.1 <- temp[-c(r,c),-c(r,c)]
 temp.1 <- rbind(temp.1, `12`=0)
 temp.1 <- cbind(temp.1, `12`=0)
 temp.1
 
-# d[(p1, p2), p3] = min[ d(p1, p3), d(p2, p3)]
+# d[(1, 2), 3] = min[ d(1, 3), d(2, 3)]
 min(temp[1,3], temp[2,3])
 
-# d[(p1, p2), p4] = min[ d(p1, p4), d(p2, p4)]
+# d[(1, 2), 4] = min[ d(1, 4), d(2, 4)]
 min(temp[1,4], temp[2,4])
 
-# d[(p1, p2), p5] = min[ d(p1, p5), d(p2, p5)]
+# d[(1, 2), 5] = min[ d(1, 5), d(2, 5)]
 min(temp[1,5], temp[2,5])
 
+setdiff(1:ncol(temp), c(r,c))
 
 adj_dist <- c()
 for (i in setdiff(1:ncol(temp), c(r,c))){
-  adj_dist <- c(adj_dist, min(temp[r,i], temp[i,c]))
+  adj_dist <- c(adj_dist, min(temp[r,i], temp[c,i]))
 }
 adj_dist <- c(adj_dist, 999)
 temp.1[nrow(temp.1), ] <- adj_dist
@@ -75,7 +78,6 @@ temp.1[ ,ncol(temp.1)] <- adj_dist
 temp.1
 
 
-### [step 2]
 # find minimum distance
 pos <- which(temp.1==min(temp.1))[1]
 pos
@@ -95,22 +97,26 @@ plot(df, pch=19, xlim=c(0,6), ylim=c(0,6), col=group)
 text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=group)
 
 
+### [step 3]
+
 # adjusted distance matrix by single linkage method
 temp.2 <- temp.1[-c(r,c),-c(r,c)]
 temp.2 <- rbind(temp.2, `45`=0)
 temp.2 <- cbind(temp.2, `45`=0)
 temp.2
 
-# d[(p1, p2), (p4, p5)] = min[ d{(p1, p2), p4}, d{(p1, p2), p5}]
-min(temp.1[4,2], temp[4,3])
+# d[(1, 2), (4, 5)] = min[d{(1, 2), 4}, d{(1, 2), 5}]
+min(temp.1[2,4], temp.1[3,4])
 
-# d[(p4, p5), p3] = min[ d(p4, p3), d(p5, p3)]
+# d[(4, 5), 3] = min[d(4, 3), d(5, 3)]
 min(temp.1[2,1], temp.1[3,1])
 
 
+setdiff(1:ncol(temp.1), c(r,c))
+
 adj_dist <- c()
 for (i in setdiff(1:ncol(temp.1), c(r,c))){
-  adj_dist <- c(adj_dist, min(temp[r,i], temp[i,c]))
+  adj_dist <- c(adj_dist, min(temp.1[r,i], temp.1[c,i]))
 }
 adj_dist <- c(adj_dist, 999)
 temp.2[nrow(temp.2), ] <- adj_dist
@@ -118,7 +124,6 @@ temp.2[ ,ncol(temp.2)] <- adj_dist
 temp.2
 
 
-### [step 3]
 # find minimum distance
 pos <- which(temp.2==min(temp.2))[1]
 pos
@@ -135,9 +140,40 @@ c
 group <- c(2,2,3,4,4)
 
 plot(df, pch=19, xlim=c(0,6), ylim=c(0,6), col=group)
-text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=group)
+text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=c(2,2,6,6,6))
 
 
+### [step4]
+
+# adjusted distance matrix by single linkage method
+temp.3 <- temp.2[-c(r,c),-c(r,c), drop=F]
+temp.3 <- rbind(temp.3, `345`=0)
+temp.3 <- cbind(temp.3, `345`=0)
+temp.3
+
+# d(12, 345) = min[d(12, 3), d(12, 45)]
+min(temp.2[3,2], temp.2[1,2])
+
+setdiff(1:ncol(temp.2), c(r,c))
+
+adj_dist <- c()
+for (i in setdiff(1:ncol(temp.2), c(r,c))){
+  adj_dist <- c(adj_dist, min(temp.2[r,i], temp.2[c,i]))
+}
+adj_dist <- c(adj_dist, 999)
+temp.3[nrow(temp.3), ] <- adj_dist
+temp.3[ ,ncol(temp.3)] <- adj_dist
+temp.3
+
+
+library(cluster)
+hc <- hclust(d, method="single")
+hc
+plot(hc, ylab="distance")
+
+########################################################################################
+####------------------------------ Drug company example --------------------------- ####
+########################################################################################
 
 ## data loading
 data <- read.csv("drug_comp.csv")
