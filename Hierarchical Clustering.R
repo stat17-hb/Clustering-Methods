@@ -15,27 +15,46 @@ plot(df, pch=19, xlim=c(0,6), ylim=c(0,6))
 text(df[,1], df[,2], labels=paste0("p",1:5), pos=1)
 
 # proximity matrix : squares of euclidian distance matrix for 5 points
-d <- dist(df, method="euclidian") # 1 and 2 have minimum distance
+d <- dist(df, method="euclidian")
 d
 
 temp <- as.matrix(d)
 temp
 
 diag(temp) <- 999
+# 군집 간 최소 거리를 찾아야 하는데 diagonal elements는 군집내 거리라서 값이 모두 0이라서
+# 이게 최솟값으로 안잡히게 하려고 임의의 큰 수를 넣어줌
 temp
 
 
 ### [step 1]
 
 # find minimum distance
-pos <- which(temp==min(temp))[1]
+
+which(temp==min(temp)) # 2번째, 6번째 값이 최솟값으로 잡히는데 symmetric matrix라서 그러는 것
+# (1,2), (2,1) 성분인데, 1과 2가 거리가 가장 가까운 data point여서 군집으로 묶인다는 의미
+
+## 거리 데이터의 위치(pos) 표현 방식
+# 1 6  11 ...
+# 2 7  12 ...
+# 3 8  13 ...
+# 4 9  14 ...
+# 5 10 15 ...
+
+pos <- which(temp==min(temp))[1] # 그 중 하나만 선택해서 위치 저장
 pos
-if (pos %% ncol(temp)!=0){
-  c <- pos %/% ncol(temp) + 1
-  r <- pos %% ncol(temp)
-} else {
-  c <- pos %/% ncol(temp)
-  r <- ncol(temp)
+if (pos %% ncol(temp)!=0){ # column 수로 위치(pos)를 나눈 나머지가 0이 아닌 경우
+
+  c <- pos %/% ncol(temp) + 1 # column 수로 위치(pos)를 나눈 몫 + 1을 거리데이터의 column 위치로 저장
+  r <- pos %% ncol(temp) # column 수로 위치(pos)를 나눈 나머지를 거리데이터의 row 위치로 저장
+
+} else { # column 수로 위치(pos)를 나눈 나머지가 0인 경우
+
+  c <- pos %/% ncol(temp) # column 수로 위치(pos)를 나눈 몫을 거리데이터의 column 위치로 저장
+  r <- ncol(temp) # column 수를 거리데이터의 row 위치로 저장
+
+  # row 위치를 저장할 때 column 수(ncol(temp))로 저장하는 것은 symmetric matrix이기 때문, nrow(temp)로 저장해도 됨
+
 }
 r
 c
@@ -166,10 +185,14 @@ temp.3[ ,ncol(temp.3)] <- adj_dist
 temp.3
 
 
+### cluster 패키지의 hclust함수의 결과와 같은지 확인
+
 library(cluster)
 hc <- hclust(d, method="single")
 hc
 plot(hc, ylab="distance")
+
+
 
 ########################################################################################
 ####------------------------------ Drug company example --------------------------- ####
