@@ -1,6 +1,9 @@
 ---
 title: "Hierachical Clustering"
-output: html_document
+output: 
+  html_document: 
+    css: ~/D2Coding.css
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
