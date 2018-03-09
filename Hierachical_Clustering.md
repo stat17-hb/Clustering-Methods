@@ -32,7 +32,7 @@ df
 5 5 4
 ```
 
-\ 
+
 
 산점도scatter plot of df
 
@@ -44,7 +44,7 @@ text(df[,1], df[,2], labels=paste0("p",1:5), pos=1)
 
 ![](Hierachical_Clustering_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
-\ 
+
 
 거리행렬(proximity matrix) : squares of euclidian distance matrix for 5 points
 
@@ -76,7 +76,7 @@ temp
 5 5.000000 4.242641 3.000000 1.414214 0.000000
 ```
 
-\ 
+
 
 
 ```r
@@ -85,7 +85,7 @@ diag(temp) <- 999
 
 군집 간 최소 거리를 찾아야 하는데 diagonal elements는 군집내 거리라서 값이 모두 0이라서 이게 최솟값으로 안잡히게 하려고 임의의 큰 수를 넣어줌
 
-\ 
+
 
 #### 알고리즘
 
@@ -106,7 +106,7 @@ which(temp==min(temp))
 
 + (1,2), (2,1) 성분인데, 1과 2가 거리가 가장 가까운 data point여서 군집으로 묶인다는 의미
 
-\ 
+
 
 거리행렬의 위치 표현방식
 
@@ -124,7 +124,7 @@ matrix(1:25, 5,5)
 [5,]    5   10   15   20   25
 ```
 
-\ 
+
 
 그 중 하나만 선택해서 위치 저장
 
@@ -138,7 +138,7 @@ pos
 [1] 2
 ```
 
-\ 
+
 
 
 ```r
@@ -170,7 +170,7 @@ c
 [1] 1
 ```
 
-\ 
+
 
 
 ```r
@@ -189,7 +189,7 @@ min(temp)
 [1] 1
 ```
 
-\ 
+
 
 
 ```r
@@ -200,7 +200,7 @@ text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=group)
 
 ![](Hierachical_Clustering_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
-\ 
+
 
 ##### [iteration 2]
 
@@ -224,7 +224,7 @@ temp.1
 
 + 최소값이 있던 행과 열을 제거한 후 새로 묶인 12 군집에 대한 행과 열을 추가
 
-\ 
+
 
 single / complete / average는 거리행렬이 업데이트 하는 방법에 따른 구분이다. 방법은 아래와 같다.
 
@@ -239,7 +239,7 @@ min(temp[1,3], temp[2,3])
 [1] 3
 ```
 
-\ 
+
 
 d[(12), 4] = min[ d(1, 4), d(2, 4)]
 
@@ -252,7 +252,7 @@ min(temp[1,4], temp[2,4])
 [1] 2.828427
 ```
 
-\ 
+
 
 d[(12), 5] = min[ d(1, 5), d(2, 5)]
 
@@ -265,7 +265,7 @@ min(temp[1,5], temp[2,5])
 [1] 4.242641
 ```
 
-\ 
+
 
 
 ```r
@@ -287,7 +287,7 @@ temp.1
 12   3.000000   2.828427   4.242641 999.000000
 ```
 
-\ 
+
 
 
 ```r
@@ -324,7 +324,7 @@ c
 
 + 4와 5의 거리가 가장 가깝다.
 
-\ 
+
 
 
 ```r
@@ -336,7 +336,7 @@ text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=group)
 
 ![](Hierachical_Clustering_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
-\ 
+
 
 ##### [iteration 3]
 
@@ -355,7 +355,7 @@ temp.2
 45   0   0  0
 ```
 
-\ 
+
 
 d[(1, 2), (4, 5)] = min[d{(1, 2), 4}, d{(1, 2), 5}]
 
@@ -368,7 +368,7 @@ min(temp.1[2,4], temp.1[3,4])
 [1] 2.828427
 ```
 
-\ 
+
 
 d[(4, 5), 3] = min[d(4, 3), d(5, 3)]
 
@@ -381,7 +381,7 @@ min(temp.1[2,1], temp.1[3,1])
 [1] 2.236068
 ```
 
-\ 
+
 
 
 ```r
@@ -402,7 +402,7 @@ temp.2
 45   2.236068   2.828427 999.000000
 ```
 
-\ 
+
 
 
 ```r
@@ -439,7 +439,7 @@ c
 
 + 3과 45의 거리가 가장 가깝기 때문에 하나의 군집으로 묶인다.
 
-\ 
+
 
 
 ```r
@@ -451,7 +451,7 @@ text(df[,1], df[,2], labels=paste0("p",1:5), pos=1, col=c(2,2,6,6,6))
 
 ![](Hierachical_Clustering_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
-\ 
+
 
 ##### [iteration 4]
 
@@ -469,7 +469,7 @@ temp.3
 345   0   0
 ```
 
-\ 
+
 
 d(12, 345) = min[d(12, 3), d(12, 45)]
 
@@ -482,7 +482,7 @@ min(temp.2[3,2], temp.2[1,2])
 [1] 2.828427
 ```
 
-\ 
+
 
 
 ```r
@@ -502,7 +502,7 @@ temp.3
 345   2.828427 999.000000
 ```
 
-\ 
+
 
 #### cluster 패키지의 hclust함수의 결과와 같은지 확인
 
@@ -523,7 +523,7 @@ Distance         : euclidean
 Number of objects: 5 
 ```
 
-\ 
+
 
 
 ```r
