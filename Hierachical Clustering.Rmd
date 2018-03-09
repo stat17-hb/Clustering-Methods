@@ -1,9 +1,10 @@
 ---
 title: "Hierachical Clustering"
-output: 
+output:
   html_document: 
     css: ~/D2Coding.css
     toc: true
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE, comment="")
 ```{r}
 x <- c(1,2,2,4,5)
 y <- c(1,1,4,3,4)
-df<- data.frame(cbind(x,y))
+df <- data.frame(cbind(x,y))
 df
 ```
 
